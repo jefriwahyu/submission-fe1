@@ -154,6 +154,16 @@ function changeFinishtoUnfinish(bookId) {
   document.dispatchEvent(new Event(RENDER_EVENT));
 };
 
+function findBookIndex(bookId) {
+  for (const index in books) {
+    if (books[index].id === bookId) {
+      return index;
+    }
+  }
+
+  return -1;
+};
+
 document.addEventListener(RENDER_EVENT, function () {
   const unfinishedBookList = document.getElementById('not-finished');
   unfinishedBookList.innerHTML = '';
