@@ -67,20 +67,18 @@ function addBooks(bookObject) {
   author.innerHTML = `Author : <span class="text-blue-500">${bookObject.author}</span>`;
 
   const year = document.createElement('p');
-  year.classList.add('text-stone-800');
+  year.classList.add('text-stone-800', 'mb-3');
   year.innerText = `Year : ${bookObject.year}`;
-
-  const breaks = document.createElement('br');
 
   const container = document.createElement('div');
   container.classList.add('bg-white', 'p-6', 'rounded-lg', 'shadow-lg');
-  container.append(title, author, year, breaks);
+  container.append(title, author, year);
   container.setAttribute('id', `book-${bookObject.id}`);
 
   if (bookObject.isComplete) {
     const unfinishedBtn = document.createElement('button');
     unfinishedBtn.classList.add('bg-green-500', 'hover:bg-green-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
-    unfinishedBtn.innerText = 'Unfinished Reading';
+    unfinishedBtn.innerText = 'Unfinished Read';
 
     unfinishedBtn.addEventListener('click', function () {
       changeFinishtoUnfinish(bookObject.id);
@@ -99,7 +97,7 @@ function addBooks(bookObject) {
   } else {
     const finishedBtn = document.createElement('button');
     finishedBtn.classList.add('bg-green-500', 'hover:bg-green-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
-    finishedBtn.innerText = 'Finished Reading';
+    finishedBtn.innerText = 'Finished Read';
 
     finishedBtn.addEventListener('click', function () {
       addBooktoFinish(bookObject.id);
@@ -136,16 +134,39 @@ function findBook(bookId) {
     }
   }
   return null;
-}
+};
+
+function removeBookFromFinish(bookId) {
+  const bookTarget = findBookIndex(bookId);
+
+  if (bookTarget === -1) return;
+
+  books.splice(bookTarget, 1);
+  document.dispatchEvent(new Event(RENDER_EVENT));
+};
+
+function changeFinishtoUnfinish(bookId) {
+  const bookTarget = findBook(bookId);
+
+  if (bookTarget == null) return;
+
+  bookTarget.isComplete = false;
+  document.dispatchEvent(new Event(RENDER_EVENT));
+};
 
 document.addEventListener(RENDER_EVENT, function () {
-  const uncompletedBookList = document.getElementById('not-finished');
-  uncompletedBookList.innerHTML = '';
+  const unfinishedBookList = document.getElementById('not-finished');
+  unfinishedBookList.innerHTML = '';
+
+  const finishedBookList = document.getElementById('finished');
+  finishedBookList.innerHTML = '';
 
   for (const bookItem of books) {
     const bookElement = addBooks(bookItem);
     if (!bookItem.isComplete) {
-      uncompletedBookList.append(bookElement);
+      unfinishedBookList.append(bookElement);
+    } else {
+      finishedBookList.append(bookElement);
     }
   }
 });
