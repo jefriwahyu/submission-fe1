@@ -63,20 +63,79 @@ function addBooks(bookObject) {
   title.innerText = bookObject.title;
 
   const author = document.createElement('p');
-  author.classList.add('text-gray-700');
-  author.innerText = bookObject.author;
+  author.classList.add('text-stone-800');
+  author.innerHTML = `Author : <span class="text-blue-500">${bookObject.author}</span>`;
 
   const year = document.createElement('p');
-  author.classList.add('text-gray-700');
-  year.innerText = bookObject.year;
+  year.classList.add('text-stone-800');
+  year.innerText = `Year : ${bookObject.year}`;
+
+  const breaks = document.createElement('br');
 
   const container = document.createElement('div');
   container.classList.add('bg-white', 'p-6', 'rounded-lg', 'shadow-lg');
-  container.append(title, author, year);
+  container.append(title, author, year, breaks);
   container.setAttribute('id', `book-${bookObject.id}`);
 
+  if (bookObject.isComplete) {
+    const unfinishedBtn = document.createElement('button');
+    unfinishedBtn.classList.add('bg-green-500', 'hover:bg-green-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
+    unfinishedBtn.innerText = 'Unfinished Reading';
+
+    unfinishedBtn.addEventListener('click', function () {
+      changeFinishtoUnfinish(bookObject.id);
+    });
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('ml-2', 'bg-red-500', 'hover:bg-red-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
+    deleteBtn.innerText = 'Delete Book';
+
+    deleteBtn.addEventListener('click', function () {
+      removeBookFromFinish(bookObject.id);
+    });
+
+    container.append(unfinishedBtn, deleteBtn);
+
+  } else {
+    const finishedBtn = document.createElement('button');
+    finishedBtn.classList.add('bg-green-500', 'hover:bg-green-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
+    finishedBtn.innerText = 'Finished Reading';
+
+    finishedBtn.addEventListener('click', function () {
+      addBooktoFinish(bookObject.id);
+    });
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('ml-2', 'bg-red-500', 'hover:bg-red-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
+    deleteBtn.innerText = 'Delete Book';
+
+    deleteBtn.addEventListener('click', function () {
+      removeBookFromFinish(bookObject.id);
+    });
+
+    container.append(finishedBtn, deleteBtn);
+  }
+  
   return container;
 
+};
+
+function addBooktoFinish (bookId) {
+  const bookTarget = findBook(bookId);
+
+  if (bookTarget == null) return;
+
+  bookTarget.isComplete = true;
+  document.dispatchEvent(new Event(RENDER_EVENT));
+};
+
+function findBook(bookId) {
+  for (const bookItem of books) {
+    if (bookItem.id === bookId) {
+      return bookItem;
+    }
+  }
+  return null;
 }
 
 document.addEventListener(RENDER_EVENT, function () {
@@ -85,6 +144,8 @@ document.addEventListener(RENDER_EVENT, function () {
 
   for (const bookItem of books) {
     const bookElement = addBooks(bookItem);
-    uncompletedBookList.append(bookElement);
+    if (!bookItem.isComplete) {
+      uncompletedBookList.append(bookElement);
+    }
   }
 });
