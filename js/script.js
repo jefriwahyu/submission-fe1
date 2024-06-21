@@ -1,6 +1,8 @@
 const books = [];
 let isComplete = false;
 const RENDER_EVENT = 'render-book';
+const SAVED_EVENT = 'saved-book';
+const STORAGE_KEY = 'BOOK_APPS';
 
 document.addEventListener('DOMContentLoaded', function () {
   const submitForm = document.getElementById('form');
@@ -21,6 +23,7 @@ function addBook() {
   books.push(bookObject);
 
   document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -33,6 +36,11 @@ document.addEventListener('DOMContentLoaded', function() {
       isComplete = false;
     }
   });
+
+  if (isStorageExist()) {
+    loadDatafromStorage();
+  }
+
 });
 
 function isCompleted() {
@@ -118,13 +126,14 @@ function addBooks(bookObject) {
 
 };
 
-function addBooktoFinish (bookId) {
+function addBooktoFinish(bookId) {
   const bookTarget = findBook(bookId);
 
   if (bookTarget == null) return;
 
   bookTarget.isComplete = true;
   document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
 };
 
 function findBook(bookId) {
@@ -143,6 +152,7 @@ function removeBookFromFinish(bookId) {
 
   books.splice(bookTarget, 1);
   document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
 };
 
 function changeFinishtoUnfinish(bookId) {
@@ -152,6 +162,7 @@ function changeFinishtoUnfinish(bookId) {
 
   bookTarget.isComplete = false;
   document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
 };
 
 function findBookIndex(bookId) {
@@ -163,6 +174,39 @@ function findBookIndex(bookId) {
 
   return -1;
 };
+
+function saveData() {
+  if (isStorageExist()) {
+    const parsed = JSON.stringify(books);
+    localStorage.setItem(STORAGE_KEY, parsed);
+    document.dispatchEvent(new Event(SAVED_EVENT));
+  }
+}
+
+function isStorageExist() {
+  if (typeof (Storage) === undefined) {
+    alert('Browser yang anda gunakan saat ini tidak mendukung local storage');
+    return FileSystemWritableFileStream;
+  }
+  return true;
+}
+
+document.addEventListener(SAVED_EVENT, function () {
+  console.log(localStorage.getItem(STORAGE_KEY));
+});
+
+function loadDatafromStorage() {
+  const serializeData = localStorage.getItem(STORAGE_KEY);
+  let data = JSON.parse(serializeData);
+
+  if (data !== null) {
+    for (const book of data) {
+      books.push(book);
+    }
+  }
+
+  document.dispatchEvent(new Event(RENDER_EVENT));
+}
 
 document.addEventListener(RENDER_EVENT, function () {
   const unfinishedBookList = document.getElementById('not-finished');
