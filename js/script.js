@@ -9,13 +9,18 @@ document.addEventListener('DOMContentLoaded', function () {
   submitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     addBook();
-  })
+
+    document.getElementById('form').reset();
+    alert('Successfully added the book..');
+  });
+
 })
 
+//menambahkan buku
 function addBook() {
   const titleBook = document.getElementById('title').value;
   const author = document.getElementById('author').value;
-  const year = document.getElementById('year').value;
+  const year = parseInt(document.getElementById('year').value);
 
   const id = generatedID();
   const isComplete = isCompleted();
@@ -26,6 +31,7 @@ function addBook() {
   saveData();
 }
 
+//memberikan nilai pada checkbox, jika tidak terceklis maka nilai nya ada false dan jika terceklis maka nilai nya true
 document.addEventListener('DOMContentLoaded', function() {
   const checkbox = document.getElementById('filter-mobile-color-1');
 
@@ -65,6 +71,7 @@ document.addEventListener(RENDER_EVENT, function () {
   console.log(books);
 })
 
+//dom menampilkan buku yang ditambahkan
 function addBooks(bookObject) {
   const title = document.createElement('h2');
   title.classList.add('text-xl', 'font-bold', 'mb-2');
@@ -122,6 +129,7 @@ function addBooks(bookObject) {
 
 };
 
+//memindahkan buku dari rak yang belum dibaca ke rak yang sudah dibaca
 function addBooktoFinish(bookId) {
   const bookTarget = findBook(bookId);
 
@@ -141,6 +149,7 @@ function findBook(bookId) {
   return null;
 };
 
+//menghapus buku
 function removeBookFromFinish(bookId) {
   const bookTarget = findBookIndex(bookId);
 
@@ -151,6 +160,7 @@ function removeBookFromFinish(bookId) {
   saveData();
 };
 
+//memindahkan buku dari rak yang sudah dibaca ke rak yang belum dibaca
 function changeFinishtoUnfinish(bookId) {
   const bookTarget = findBook(bookId);
 
@@ -171,6 +181,7 @@ function findBookIndex(bookId) {
   return -1;
 };
 
+//menyimpan data pada localstorage
 function saveData() {
   if (isStorageExist()) {
     const parsed = JSON.stringify(books);
@@ -186,10 +197,6 @@ function isStorageExist() {
   }
   return true;
 }
-
-document.addEventListener(SAVED_EVENT, function () {
-  console.log(localStorage.getItem(STORAGE_KEY));
-});
 
 function loadDatafromStorage() {
   const serializeData = localStorage.getItem(STORAGE_KEY);
