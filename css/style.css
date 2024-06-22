@@ -1,0 +1,48 @@
+
+.unfinishBtn {
+    width: 40px;
+    height: 40px;
+
+    background: url('../asset/unfinish.png');
+    background-size: contain;
+    margin-left: auto;
+    cursor: pointer;
+    border: none;
+}
+  
+.unfinishBtn:hover {
+    background: url('../asset/hover-unfinish.png');
+    background-size: contain;
+}
+
+.finishBtn {
+    width: 40px;
+    height: 40px;
+
+    background: url('../asset/accept.png');
+    background-size: contain;
+    margin-left: auto;
+    cursor: pointer;
+    border: none;
+}
+  
+.finishBtn:hover {
+    background: url('../asset/hover-accept.png');
+    background-size: contain;
+}
+
+.deleteBtn {
+    width: 40px;
+    height: 40px;
+
+    background: url('../asset/cross.png');
+    background-size: contain;
+    margin-left: auto;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .deleteBtn:hover {
+    background: url('../asset/hover-cross.png');
+    background-size: contain;
+  }

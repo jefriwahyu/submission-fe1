@@ -75,7 +75,7 @@ function addBooks(bookObject) {
   author.innerHTML = `Author : <span class="text-blue-500">${bookObject.author}</span>`;
 
   const year = document.createElement('p');
-  year.classList.add('text-stone-800', 'mb-3');
+  year.classList.add('text-stone-800', 'mb-3', 'text-sm');
   year.innerText = `Year : ${bookObject.year}`;
 
   const container = document.createElement('div');
@@ -85,16 +85,14 @@ function addBooks(bookObject) {
 
   if (bookObject.isComplete) {
     const unfinishedBtn = document.createElement('button');
-    unfinishedBtn.classList.add('bg-green-500', 'hover:bg-green-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
-    unfinishedBtn.innerText = 'Unfinished Read';
+    unfinishedBtn.classList.add('unfinishBtn', 'text-sm', 'py-2', 'px-2', 'rounded-full');
 
     unfinishedBtn.addEventListener('click', function () {
       changeFinishtoUnfinish(bookObject.id);
     });
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.classList.add('ml-2', 'bg-red-500', 'hover:bg-red-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
-    deleteBtn.innerText = 'Delete Book';
+    deleteBtn.classList.add('deleteBtn', 'ml-2', 'bg-red-500', 'hover:bg-red-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
 
     deleteBtn.addEventListener('click', function () {
       removeBookFromFinish(bookObject.id);
@@ -104,16 +102,14 @@ function addBooks(bookObject) {
 
   } else {
     const finishedBtn = document.createElement('button');
-    finishedBtn.classList.add('bg-green-500', 'hover:bg-green-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
-    finishedBtn.innerText = 'Finished Read';
+    finishedBtn.classList.add('finishBtn', 'text-sm', 'py-2', 'px-2', 'rounded-full');
 
     finishedBtn.addEventListener('click', function () {
       addBooktoFinish(bookObject.id);
     });
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.classList.add('ml-2', 'bg-red-500', 'hover:bg-red-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
-    deleteBtn.innerText = 'Delete Book';
+    deleteBtn.classList.add('deleteBtn', 'ml-2', 'bg-red-500', 'hover:bg-red-700', 'text-white', 'text-sm', 'py-2', 'px-2', 'rounded-full');
 
     deleteBtn.addEventListener('click', function () {
       removeBookFromFinish(bookObject.id);
